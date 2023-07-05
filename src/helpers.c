@@ -38,3 +38,17 @@ SEXP R_randombytes_buf(SEXP length){
   return res;
 }
 
+SEXP R_sodium_increment(SEXP bin){
+  size_t bin_len = LENGTH(bin);
+  SEXP out = allocVector(RAWSXP, bin_len);
+  memcpy(RAW(out), RAW(bin), bin_len);
+  sodium_increment(RAW(out), bin_len);
+  return out;
+}
+
+SEXP R_sodium_is_zero(SEXP bin){
+  size_t bin_len = LENGTH(bin);
+  int res = sodium_is_zero(RAW(bin), bin_len);
+  return ScalarLogical(res == 1);
+}
+
